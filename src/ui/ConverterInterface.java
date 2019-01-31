@@ -78,12 +78,12 @@ public class ConverterInterface extends javax.swing.JFrame {
 
         jLabel2.setText("Input Base:");
 
-        spinInputBase.setModel(new javax.swing.SpinnerNumberModel(10, 2, 36, 1));
+        spinInputBase.setModel(new javax.swing.SpinnerNumberModel(10, 2, 65536, 1));
         spinInputBase.addChangeListener(this::calculate);
 
         jLabel3.setText("Output Base:");
 
-        spinOutputBase.setModel(new javax.swing.SpinnerNumberModel(2, 2, 36, 1));
+        spinOutputBase.setModel(new javax.swing.SpinnerNumberModel(2, 2, 65536, 1));
         spinOutputBase.addChangeListener(this::calculate);
         
         txtInput.setHorizontalAlignment(javax.swing.JTextField.RIGHT);

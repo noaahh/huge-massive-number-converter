@@ -20,6 +20,9 @@ class ConverterTest {
 	private final static String BASE_10 = "3126485650002806059265235559620383787531710118313327355";
 	private final static String BASE_16 = "20a45c4a82a3eb406af773b5c3f6bbb6BAA8700357FAFB";
 	private final static String BASE_36 = "1234567890abcdefghijklmnopqrSTUvwxyz";
+	private final static String BASE_47 = "9y5cHgrwpFbhBnuCyJaed5wnfyCxcebJB";
+	private final static String BASE_62 = "5hRJZ7sB3CagH23u91NST5lMBb9JIlJ";
+	private final static String BASE_64 = "CCkXEqCo+tAavdztcP2u7a6qHADV/r7";
 	
 	private static LinkedHashMap<Integer, String> BASES = new LinkedHashMap<>(6);
 	
@@ -32,6 +35,9 @@ class ConverterTest {
 		BASES.put(10, BASE_10);
 		BASES.put(16, BASE_16);
 		BASES.put(36, BASE_36);
+		BASES.put(47, BASE_47);
+		BASES.put(62, BASE_62);
+		BASES.put(64, BASE_64);
 	}
 	
 	@Test
@@ -45,11 +51,12 @@ class ConverterTest {
 	public void validateBaseConversation() {
 		for (Integer baseX: BASES.keySet()) {
 			for (Integer baseY : BASES.keySet()) {
-				assertEquals(BASES.get(baseY).toLowerCase(), Converter.convert(BASES.get(baseX), baseX, baseY).toLowerCase(), "base" + baseX +" to base" + baseY + " failed");
+				String y = BASES.get(baseY);
+				if (baseY <= 36) y = y.toLowerCase();
+				assertEquals(y, Converter.convert(BASES.get(baseX), baseX, baseY), "base" + baseX +" to base" + baseY + " failed");
 			}
 		}
 	}
-	
 	
 	private static String getValidationRegexRange(int base) {
 		if (base > 36 || base < 2) return "";
