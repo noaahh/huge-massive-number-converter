@@ -5,14 +5,26 @@
  */
 package ui;
 
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.JLabel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 
 import bo.Converter;
 
@@ -29,26 +41,25 @@ public class ConverterInterface extends javax.swing.JFrame {
 	private JLabel jLabel3;
 	private JLabel jLabel4;
 	private JLabel jLabel5;
-	private javax.swing.JSpinner spinInputBase;
-	private javax.swing.JSpinner spinOutputBase;
-	private javax.swing.JTextField txtInput;
-	private javax.swing.JTextField txtOutput;
+	private JSpinner spinInputBase;
+	private JSpinner spinOutputBase;
+	private JTextArea txtInput;
+	private JTextArea txtOutput;
 
 	/**
      * Creates new form ConverterInterface
      */
     public ConverterInterface() {
-        try {
-            UIManager.setLookAndFeel(new WindowsLookAndFeel());
-        } catch (UnsupportedLookAndFeelException ex) { /* ignore Exception */ }
-
+    	//load fonts
+		try {
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./lib/unifont-11.0.03.ttf")));
+		} catch (IOException | FontFormatException e) {
+			JOptionPane.showConfirmDialog(this, "Could not load Unifont font", "Font not found", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+			throw new RuntimeException("Could not load Unifont font", e);
+    	}
+    	
         initComponents();
-
-        txtInput.getDocument().addDocumentListener(new DocumentListener() {
-            @Override public void changedUpdate(DocumentEvent e) { calculate(); }
-            @Override public void removeUpdate (DocumentEvent e) { calculate(); }
-            @Override public void insertUpdate (DocumentEvent e) { calculate(); }
-        });
     }
 
     /**
@@ -58,102 +69,117 @@ public class ConverterInterface extends javax.swing.JFrame {
      */
     private void initComponents() {
 
-        jLabel1 = new JLabel();
-        jLabel2 = new JLabel();
-        spinInputBase = new javax.swing.JSpinner();
-        jLabel3 = new JLabel();
-        spinOutputBase = new javax.swing.JSpinner();
-        txtInput = new javax.swing.JTextField();
-        jLabel4 = new JLabel();
-        jLabel5 = new JLabel();
-        txtOutput = new javax.swing.JTextField();
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setTitle("Huge Massive Number Converter");
+		setBackground(new Color(0, 0, 0));
+		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[] { 26, 115, 409, 26, 0 };
+		gridBagLayout.rowHeights = new int[] { 26, 39, 26, 26, 54, 100, 100, 26, 0 };
+		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
+		getContentPane().setLayout(gridBagLayout);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Huge Massive Number Converter");
-        setBackground(new java.awt.Color(0, 0, 0));
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        jLabel1.setFont(new java.awt.Font("Calibri Light", 1, 24)); // NOI18N
-        jLabel1.setText("Huge Massive Number Converter");
-
-        jLabel2.setText("Input Base:");
-
-        spinInputBase.setModel(new javax.swing.SpinnerNumberModel(10, 2, 65536, 1));
-        spinInputBase.addChangeListener(this::calculate);
-
-        jLabel3.setText("Output Base:");
-
-        spinOutputBase.setModel(new javax.swing.SpinnerNumberModel(2, 2, 65536, 1));
-        spinOutputBase.addChangeListener(this::calculate);
-        
-        txtInput.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtInput.setText("0");
-
-        jLabel4.setText("Input number:");
-
-        jLabel5.setText("Output number:");
-
-        txtOutput.setEditable(false);
-        txtOutput.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addGap(45, 45, 45)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(spinOutputBase)
-                                    .addComponent(spinInputBase, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))))
-                        .addGap(0, 184, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtInput)
-                            .addComponent(txtOutput))))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(spinInputBase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(spinOutputBase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtOutput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(33, Short.MAX_VALUE))
-        );
+		jLabel1 = new JLabel();
+		jLabel1.setText("Huge Massive Number Converter");
+		GridBagConstraints gbc_jLabel1 = new GridBagConstraints();
+		gbc_jLabel1.anchor = GridBagConstraints.WEST;
+		gbc_jLabel1.fill = GridBagConstraints.VERTICAL;
+		gbc_jLabel1.insets = new Insets(0, 0, 5, 5);
+		gbc_jLabel1.gridwidth = 2;
+		gbc_jLabel1.gridx = 1;
+		gbc_jLabel1.gridy = 1;
+		getContentPane().add(jLabel1, gbc_jLabel1);
+		
+		spinOutputBase = new JSpinner();
+		spinOutputBase.setModel(new SpinnerNumberModel(2, 2, 65536, 1));
+		spinOutputBase.addChangeListener(this::calculate);
+		GridBagConstraints gbc_spinOutputBase = new GridBagConstraints();
+		gbc_spinOutputBase.anchor = GridBagConstraints.NORTHWEST;
+		gbc_spinOutputBase.insets = new Insets(0, 0, 5, 5);
+		gbc_spinOutputBase.gridx = 2;
+		gbc_spinOutputBase.gridy = 3;
+		getContentPane().add(spinOutputBase, gbc_spinOutputBase);
+		
+		jLabel2 = new JLabel();
+		jLabel2.setText("Input Base:");
+		GridBagConstraints gbc_jLabel2 = new GridBagConstraints();
+		gbc_jLabel2.anchor = GridBagConstraints.WEST;
+		gbc_jLabel2.insets = new Insets(0, 0, 5, 5);
+		gbc_jLabel2.gridx = 1;
+		gbc_jLabel2.gridy = 2;
+		getContentPane().add(jLabel2, gbc_jLabel2);
+		
+		spinInputBase = new JSpinner();
+		spinInputBase.setModel(new SpinnerNumberModel(10, 2, 65536, 1));
+		spinInputBase.addChangeListener(this::calculate);
+		GridBagConstraints gbc_spinInputBase = new GridBagConstraints();
+		gbc_spinInputBase.anchor = GridBagConstraints.NORTHWEST;
+		gbc_spinInputBase.insets = new Insets(0, 0, 5, 5);
+		gbc_spinInputBase.gridx = 2;
+		gbc_spinInputBase.gridy = 2;
+		getContentPane().add(spinInputBase, gbc_spinInputBase);
+		
+		jLabel3 = new JLabel();
+		jLabel3.setText("Output Base:");
+		GridBagConstraints gbc_jLabel3 = new GridBagConstraints();
+		gbc_jLabel3.anchor = GridBagConstraints.WEST;
+		gbc_jLabel3.insets = new Insets(0, 0, 5, 5);
+		gbc_jLabel3.gridx = 1;
+		gbc_jLabel3.gridy = 3;
+		getContentPane().add(jLabel3, gbc_jLabel3);
+		
+		jLabel4 = new JLabel();
+		jLabel4.setText("Input number:");
+		GridBagConstraints gbc_jLabel4 = new GridBagConstraints();
+		gbc_jLabel4.fill = GridBagConstraints.VERTICAL;
+		gbc_jLabel4.anchor = GridBagConstraints.WEST;
+		gbc_jLabel4.insets = new Insets(0, 0, 5, 5);
+		gbc_jLabel4.gridx = 1;
+		gbc_jLabel4.gridy = 5;
+		getContentPane().add(jLabel4, gbc_jLabel4);
+		txtInput = new JTextArea();
+		txtInput.setFont(new Font("Unifont", Font.PLAIN, 20));
+		txtInput.setRows(5);
+		txtInput.setLineWrap(true);
+		txtInput.setText("0");
+		txtInput.getDocument().addDocumentListener(new DocumentListener() {
+            @Override public void changedUpdate(DocumentEvent e) { calculate(); }
+            @Override public void removeUpdate (DocumentEvent e) { calculate(); }
+            @Override public void insertUpdate (DocumentEvent e) { calculate(); }
+        });
+		GridBagConstraints gbc_txtInput = new GridBagConstraints();
+		gbc_txtInput.fill = GridBagConstraints.BOTH;
+		gbc_txtInput.insets = new Insets(0, 0, 5, 5);
+		gbc_txtInput.gridx = 2;
+		gbc_txtInput.gridy = 5;
+		getContentPane().add(txtInput, gbc_txtInput);
+		
+		jLabel5 = new JLabel();
+		jLabel5.setText("Output number:");
+		GridBagConstraints gbc_jLabel5 = new GridBagConstraints();
+		gbc_jLabel5.fill = GridBagConstraints.VERTICAL;
+		gbc_jLabel5.anchor = GridBagConstraints.WEST;
+		gbc_jLabel5.insets = new Insets(0, 0, 5, 5);
+		gbc_jLabel5.gridx = 1;
+		gbc_jLabel5.gridy = 6;
+		getContentPane().add(jLabel5, gbc_jLabel5);
+		txtOutput = new JTextArea();
+		txtOutput.setFont(new Font("Unifont", Font.PLAIN, 20));
+		txtOutput.setRows(5);
+		txtOutput.setLineWrap(true);
+		txtOutput.setEditable(false);
+		GridBagConstraints gbc_txtOutput = new GridBagConstraints();
+		gbc_txtOutput.insets = new Insets(0, 0, 5, 5);
+		gbc_txtOutput.fill = GridBagConstraints.BOTH;
+		gbc_txtOutput.gridx = 2;
+		gbc_txtOutput.gridy = 6;
+        getContentPane().add(txtOutput, gbc_txtOutput);
 
         pack();
     }
 
     private void calculate(ChangeEvent evt) { calculate(); }
-    
     private void calculate() {
         txtOutput.setText(Converter.convert(txtInput.getText(), (Integer) spinInputBase.getValue(), (Integer) spinOutputBase.getValue()));
     }
