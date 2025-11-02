@@ -66,4 +66,35 @@ class ConverterTest {
 		return "[" + numRange + charRange + charRange.toUpperCase() + "]+";
 	}
 
+	@Test
+	void testBase65536Conversion() {
+		// Test conversion to base65536
+		String result = Converter.convert("1000", 10, 65536);
+		assertEquals("Ϩ", result, "1000 in base 10 should convert to U+03E8 in base 65536");
+		
+		// Test conversion back from base65536
+		String backToBase10 = Converter.convert(result, 65536, 10);
+		assertEquals("1000", backToBase10, "Should convert back to 1000");
+		
+		// Test a larger number
+		String largeNum = "123456789012345678901234567890";
+		String base65536 = Converter.convert(largeNum, 10, 65536);
+		assertTrue(base65536 != null && base65536.length() > 0, "Should convert large number to base 65536");
+		
+		// Test conversion back
+		String backFromLarge = Converter.convert(base65536, 65536, 10);
+		assertEquals(largeNum, backFromLarge, "Should convert back to original large number");
+		
+		// Test edge case: maximum single character in base65536
+		String maxSingleChar = "65535";
+		String maxResult = Converter.convert(maxSingleChar, 10, 65536);
+		assertEquals("\uFFFF", maxResult, "65535 should convert to U+FFFF");
+		
+		// Test conversion from base 10 to base65536 and back to another base
+		String base10Value = "1000000";
+		String toBase65536 = Converter.convert(base10Value, 10, 65536);
+		String toBase16 = Converter.convert(toBase65536, 65536, 16);
+		assertEquals("f4240", toBase16.toLowerCase(), "Should maintain value through base65536 conversion");
+	}
+
 }
