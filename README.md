@@ -12,7 +12,7 @@ A GUI for converting any number with base higher than 2 and lower than or equal 
 
 Base65536 uses Unicode characters to represent values from 0 to 65535. Each character in base 65536 represents a single "digit" in that base system. For example:
 - The number 1000 in base 10 converts to "Ϩ" (U+03E8) in base 65536
-- The number 65535 in base 10 converts to "￿" (U+FFFF) in base 65536
+- The number 12345 in base 10 converts to "〹" (U+3039) in base 65536
 - Large numbers are represented as sequences of Unicode characters
 
 The application uses the Unifont font to properly display all Unicode characters needed for base 65536 representation.
