@@ -58,6 +58,34 @@ class ConverterTest {
 		}
 	}
 	
+	@Test
+	public void testGoogolConversion() {
+		// 1 googol = 10^100
+		String googolBase10 = "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+		String googolBase2 = "100100100100110101101001001011001010011000011011111001110101100001011001001111000010011000100110011100000101111110011100010101100111001000000100011100010000100011010011111001010101010110010010000110000100010101000001011101000111100010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+		String googolBase7 = "16201341553122251063252024261246503522112115506446252526241360534151125226544036056624134325461423451523416401660341314";
+		String googolBase16 = "1249ad2594c37ceb0b2784c4ce0bf38ace408e211a7caab24308a82e8f10000000000000000000000000";
+		String googolBase64 = "EkmtJZTDfOsLJ4TEzgvzis5AjiEafKqyQwioLo8QAAAAAAAAAAAAAAAA";
+		
+		// Test conversions from base 10 to other bases
+		assertEquals(googolBase2, Converter.convert(googolBase10, 10, 2), "base 10 to base 2 failed");
+		assertEquals(googolBase7, Converter.convert(googolBase10, 10, 7), "base 10 to base 7 failed");
+		assertEquals(googolBase16, Converter.convert(googolBase10, 10, 16), "base 10 to base 16 failed");
+		assertEquals(googolBase64, Converter.convert(googolBase10, 10, 64), "base 10 to base 64 failed");
+		
+		// Test conversions back to base 10
+		assertEquals(googolBase10, Converter.convert(googolBase2, 2, 10), "base 2 to base 10 failed");
+		assertEquals(googolBase10, Converter.convert(googolBase7, 7, 10), "base 7 to base 10 failed");
+		assertEquals(googolBase10, Converter.convert(googolBase16, 16, 10), "base 16 to base 10 failed");
+		assertEquals(googolBase10, Converter.convert(googolBase64, 64, 10), "base 64 to base 10 failed");
+		
+		// Test cross-conversions between non-base-10 bases
+		assertEquals(googolBase2, Converter.convert(googolBase7, 7, 2), "base 7 to base 2 failed");
+		assertEquals(googolBase16, Converter.convert(googolBase2, 2, 16), "base 2 to base 16 failed");
+		assertEquals(googolBase64, Converter.convert(googolBase16, 16, 64), "base 16 to base 64 failed");
+		assertEquals(googolBase7, Converter.convert(googolBase64, 64, 7), "base 64 to base 7 failed");
+	}
+	
 	private static String getValidationRegexRange(int base) {
 		if (base > 36 || base < 2) return "";
 
